@@ -2,19 +2,27 @@
 
 | File | For | Purpose |
 |---|---|---|
-| [`MOSTALIFE_Website_Quote.html`](MOSTALIFE_Website_Quote.html) | **Client** | Full quote: 5 plans, feature-by-feature prices, suggestions, maintenance, launch offer, signature. Open in a browser → “Edit text” → “Print / Save as PDF”. |
+| [`MOSTALIFE_Website_Quote.html`](MOSTALIFE_Website_Quote.html) | **Client** | Full quote in **French, Arabic and English** (switch in the toolbar), prices in **USD and DZD**. Toolbar: language, exchange rate (all DA amounts update), “Edit text”, “Print / PDF”. |
+| `MOSTALIFE_Quote_FR.pdf` · `_AR.pdf` · `_EN.pdf` | **Client** | Ready-made PDF of each language (11 A4 pages, rate 1 USD = 135 DZD). |
 | [`SALES_PLAYBOOK.md`](SALES_PLAYBOOK.md) | **You only** | How to pitch, which plan to push, discovery questions, objection handling, follow-up messages, contract checklist. |
+| [`tools/build_quote.py`](tools/build_quote.py) | Developer | Regenerates the HTML from one data file (prices, texts in 3 languages, default rate). |
 
-## Plans (USD, excl. taxes)
+## Plans (excl. taxes — 1 USD = 135 DZD)
 
-| Plan | Price | Delivery | Adds |
+| Plan | USD | DZD | Delivery |
 |---|---|---|---|
-| 1. Essential — premium landing page | **$600** | 1–2 weeks | One-page luxury site, typologies, gallery, location, lead form + WhatsApp, catalogue download for leads, FR + AR, Analytics + Meta Pixel |
-| 2. Starter — showcase & reservation requests | **$1,200** | 3 weeks | Multi-page site, page for each of the 9 unit types, availability table, visit booking, reservation requests, admin panel |
-| 3. Business — interactive sales platform ⭐ | **$2,500** | 5–6 weeks | Interactive building selector, parking (67 spaces) and commercial-space modules, buyer accounts, CRM, payment plan simulator, PDF reservation forms, notifications, English |
-| 4. Professional — online reservation & buyer portal | **$5,000** | 8–10 weeks | Online deposit (CIB / Edahabia + international), automatic unit lock, buyer portal with installments, construction progress, team roles, sales dashboard, 360° tour, SMS, security |
-| 5. Premium — multi-project platform + mobile app | **$10,000** | 3–4 months | iOS + Android apps, multi-project platform, e-signature, AI assistant, WhatsApp Business API, marketing automation, advanced analytics |
+| 1. Essential — premium landing page | **$600** | **81,000 DA** | 1–2 weeks |
+| 2. Starter — showcase & reservation requests | **$1,200** | **162,000 DA** | 3 weeks |
+| 3. Business — interactive sales platform ⭐ | **$2,500** | **337,500 DA** | 5–6 weeks |
+| 4. Professional — online reservation & buyer portal | **$5,000** | **675,000 DA** | 8–10 weeks |
+| 5. Premium — multi-project platform + mobile app | **$10,000** | **1,350,000 DA** | 3–4 months |
 
-Each plan includes everything in the previous one. Every feature's individual price is listed in the HTML quote.
+Each plan includes everything in the previous one. Every feature's individual price (USD + DZD) is listed in the quote.
 
-Maintenance: $20 / $45 / $90 per month. Extra services (ads, videos, social media kit, etc.) are listed in the quote.
+Maintenance: $20 / $45 / $90 per month (≈ 2,700 / 6,100 / 12,200 DA).
+
+## Regenerate after changing prices or texts
+
+```bash
+python3 tools/build_quote.py tools/tower.jpg MOSTALIFE_Website_Quote.html
+```
