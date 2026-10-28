@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Website Quote — Albarakah Investment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ==========================================================
+     TEMPLATE SETTINGS — change brand colors here
+     ========================================================== */
+  :root {
+    --navy: #12304a;
+    --navy-2: #1d4767;
+    --gold: #b8893b;
+    --gold-soft: #f4ead8;
+    --ink: #1c2530;
+    --muted: #5f6b78;
+    --line: #e2e6eb;
+    --bg: #eef1f4;
+    --paper: #ffffff;
+    --row-alt: #f8f9fb;
+    --green: #1f7a4d;
+    --red: #b03a2e;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* ---------- Toolbar (hidden when printing) ---------- */
+  .toolbar {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+    padding: 10px 16px;
+    background: rgba(18, 48, 74, .96);
+    color: #fff;
+  }
+  .toolbar button {
+    font: inherit; font-weight: 600; font-size: 13px;
+    padding: 8px 14px; border-radius: 6px; cursor: pointer;
+    border: 1px solid rgba(255,255,255,.35); background: transparent; color: #fff;
+  }
+  .toolbar button.primary { background: var(--gold); border-color: var(--gold); }
+  .toolbar button[aria-pressed="true"] { background: #fff; color: var(--navy); }
+  .toolbar .hint { font-size: 12px; opacity: .8; align-self: center; }
+  body.editing [contenteditable="true"]:hover,
+  body.editing .doc *:hover { outline: 1px dashed var(--gold); outline-offset: 2px; }
+
+  /* ---------- Document ---------- */
+  .doc {
+    max-width: 960px;
+    margin: 24px auto;
+    background: var(--paper);
+    box-shadow: 0 2px 24px rgba(18, 48, 74, .10);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .content { padding: 32px 40px 40px; }
+
+  /* Header */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+    color: #fff;
+    padding: 32px 40px 28px;
+    position: relative;
+  }
+  .hero::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px;
+    background: var(--gold);
+  }
+  .hero-top { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .provider .logo {
+    width: 52px; height: 52px; border-radius: 10px;
+    background: var(--gold); color: var(--navy);
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 20px; margin-bottom: 10px;
+  }
+  .provider .name { font-size: 18px; font-weight: 700; }
+  .provider .small, .quote-meta .small { font-size: 12.5px; opacity: .85; }
+  .quote-meta { text-align: right; }
+  .quote-meta .label {
+    display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .14em;
+    color: var(--gold); text-transform: uppercase;
+  }
+  .quote-meta .big { font-size: 28px; font-weight: 800; letter-spacing: .02em; margin: 2px 0 6px; }
+  .quote-meta table { margin-left: auto; border-collapse: collapse; font-size: 13px; }
+  .quote-meta td { padding: 1px 0 1px 12px; }
+  .quote-meta td:first-child { opacity: .75; }
+  .hero h1 { margin: 26px 0 4px; font-size: 26px; line-height: 1.25; font-weight: 800; }
+  .hero .subtitle { margin: 0; opacity: .85; font-size: 14.5px; }
+
+  /* Parties */
+  .parties { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+  .party {
+    border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px;
+  }
+  .party h4 {
+    margin: 0 0 6px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold);
+  }
+  .party .pname { font-weight: 700; font-size: 15px; }
+  .party p { margin: 2px 0; color: var(--muted); font-size: 13px; }
+
+  .note {
+    background: var(--gold-soft); border-left: 4px solid var(--gold);
+    padding: 10px 14px; border-radius: 0 6px 6px 0; font-size: 13px; color: #5a4520;
+    margin: 0 0 24px;
+  }
+
+  /* Section headings */
+  h2 {
+    font-size: 19px; margin: 36px 0 14px; color: var(--navy);
+    display: flex; align-items: center; gap: 10px;
+    break-after: avoid; page-break-after: avoid;
+  }
+  h2 .num {
+    flex: none; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--navy); color: #fff; font-size: 13px;
+    display: grid; place-items: center;
+  }
+  h3 { font-size: 15px; margin: 18px 0 8px; color: var(--navy); }
+  p.lead { color: var(--muted); margin: -6px 0 14px; }
+
+  /* Offer cards */
+  .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .card {
+    border: 1px solid var(--line); border-radius: 10px; padding: 16px 14px 14px;
+    display: flex; flex-direction: column; position: relative;
+    break-inside: avoid; page-break-inside: avoid;
+  }
+  .card.featured { border: 2px solid var(--gold); background: #fffdf8; }
+  .card .badge {
+    position: absolute; top: -10px; left: 14px;
+    background: var(--gold); color: #fff; font-size: 10.5px; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase; padding: 3px 8px; border-radius: 20px;
+  }
+  .card .tier { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
+  .card .cname { font-size: 15.5px; font-weight: 700; color: var(--navy); margin: 2px 0 8px; line-height: 1.3; }
+  .card .price { font-size: 24px; font-weight: 800; color: var(--ink); line-height: 1.1; }
+  .card .dzd { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .card .time { font-size: 12px; color: var(--navy-2); font-weight: 600; margin-bottom: 10px; }
+  .card ul { margin: 0; padding: 0; list-style: none; font-size: 12.5px; }
+  .card li { padding: 3px 0 3px 18px; position: relative; border-top: 1px solid var(--line); }
+  .card li::before { content: "✓"; position: absolute; left: 2px; color: var(--green); font-weight: 700; }
+  .card .target { margin-top: auto; padding-top: 10px; font-size: 11.5px; color: var(--muted); font-style: italic; }
+
+  /* Offer section header */
+  .offer-head {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+    background: var(--row-alt); border: 1px solid var(--line); border-radius: 8px;
+    padding: 12px 16px; margin-bottom: 10px;
+    break-after: avoid; page-break-after: avoid;
+  }
+  .offer-head .desc { color: var(--muted); font-size: 13px; max-width: 600px; }
+  .pill {
+    background: var(--navy); color: #fff; border-radius: 30px; padding: 6px 14px;
+    font-weight: 700; white-space: nowrap; font-size: 14px;
+  }
+  .pill small { font-weight: 500; opacity: .8; margin-left: 6px; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table.t { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.t th {
+    background: var(--navy); color: #fff; text-align: left; font-weight: 600;
+    padding: 8px 10px; font-size: 12px; letter-spacing: .02em;
+  }
+  table.t td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.t tbody tr:nth-child(even) td { background: var(--row-alt); }
+  table.t tr { break-inside: avoid; page-break-inside: avoid; }
+  table.t thead { display: table-header-group; }
+  table.t .id { color: var(--gold); font-weight: 700; white-space: nowrap; width: 44px; }
+  table.t .feat { font-weight: 600; width: 30%; }
+  table.t .amt { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; width: 110px; }
+  table.t .muted { color: var(--muted); }
+  table.t tr.base td { font-style: italic; color: var(--muted); }
+  table.t tfoot td { border-bottom: none; padding: 6px 10px; font-variant-numeric: tabular-nums; }
+  table.t tfoot .lbl { text-align: right; color: var(--muted); }
+  table.t tfoot tr.disc td { color: var(--green); }
+  table.t tfoot tr.total td {
+    font-weight: 800; font-size: 15px; color: var(--navy);
+    border-top: 2px solid var(--navy); padding-top: 9px;
+  }
+  .excl { font-size: 12.5px; color: var(--muted); margin: 8px 0 0; }
+  .excl b { color: var(--red); }
+
+  /* Generic grids */
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .box { border: 1px solid var(--line); border-radius: 8px; padding: 14px 18px; break-inside: avoid; page-break-inside: avoid; }
+  .box h3 { margin-top: 0; }
+  .box ul { margin: 0; padding-left: 18px; }
+  .box li { margin: 3px 0; }
+
+  .reco { display: grid; gap: 10px; }
+  .reco .r {
+    display: grid; grid-template-columns: 54px 1fr; gap: 12px; align-items: center;
+    border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px;
+    break-inside: avoid; page-break-inside: avoid;
+  }
+  .reco .r .tag {
+    width: 44px; height: 44px; border-radius: 8px; background: var(--navy); color: #fff;
+    display: grid; place-items: center; font-weight: 800; font-size: 18px;
+  }
+  .reco .r.best { border: 2px solid var(--gold); background: #fffdf8; }
+  .reco .r.best .tag { background: var(--gold); }
+
+  /* Signatures */
+  .signs { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; break-inside: avoid; page-break-inside: avoid; }
+  .sign { border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; min-height: 150px; }
+  .sign h4 { margin: 0 0 4px; font-size: 13px; color: var(--navy); }
+  .sign p { margin: 0 0 6px; font-size: 12px; color: var(--muted); }
+  .sign .line { border-bottom: 1px dotted #9aa5b1; height: 26px; margin-top: 4px; font-size: 12px; color: var(--muted); }
+
+  .doc-footer {
+    margin-top: 32px; padding-top: 14px; border-top: 1px solid var(--line);
+    font-size: 11.5px; color: var(--muted); text-align: center;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 860px) {
+    .cards { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .doc { margin: 0; border-radius: 0; }
+    .content { padding: 20px 16px 28px; }
+    .hero { padding: 22px 16px 22px; }
+    .quote-meta { text-align: left; }
+    .quote-meta table { margin-left: 0; }
+    .quote-meta td { padding: 1px 12px 1px 0; }
+    .hero h1 { font-size: 21px; }
+    .parties, .two, .signs, .cards { grid-template-columns: 1fr; }
+    table.t { min-width: 560px; }
+  }
+
+  /* ---------- Print / Save as PDF ---------- */
+  @page { size: A4; margin: 12mm 11mm 14mm; }
+  @media print {
+    body { background: #fff; font-size: 11.5px; }
+    .toolbar { display: none !important; }
+    .doc { box-shadow: none; margin: 0; max-width: none; border-radius: 0; }
+    .content { padding: 18px 4px 0; }
+    .hero { padding: 18px 22px 16px; }
+    .hero h1 { font-size: 20px; margin-top: 14px; }
+    .hero .subtitle { font-size: 12px; }
+    .provider .logo { width: 40px; height: 40px; font-size: 15px; margin-bottom: 6px; }
+    .quote-meta .big { font-size: 22px; }
+    .parties { margin-bottom: 14px; }
+    .party { padding: 10px 12px; }
+    .note { margin-bottom: 8px; padding: 8px 12px; font-size: 11.5px; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cards { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .card { padding: 14px 10px 10px; }
+    .card .price { font-size: 20px; }
+    .card ul { font-size: 11px; }
+    .card li { padding: 2px 0 2px 15px; }
+    .parties, .two, .signs { grid-template-columns: 1fr 1fr; }
+    table.t { font-size: 11px; min-width: 0; }
+    .page-break { break-before: page; page-break-before: always; }
+    h2 { margin-top: 22px; }
+    .table-wrap { overflow: visible; }
+    .reco { gap: 6px; }
+    .reco .r { padding: 6px 12px; }
+    .reco .r .tag { width: 34px; height: 34px; font-size: 15px; }
+    .sign { min-height: 0; padding: 10px 14px; }
+    .sign .line { height: 22px; }
+    .doc-footer { margin-top: 14px; padding-top: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Toolbar: not printed -->
+<div class="toolbar" role="toolbar" aria-label="Document actions">
+  <button type="button" id="editBtn" aria-pressed="false">✎ Edit text</button>
+  <button type="button" class="primary" onclick="window.print()">⎙ Print / Save as PDF</button>
+  <span class="hint">Click “Edit text” to fill in the fields in [brackets], then print.</span>
+</div>
+
+<main class="doc">
+
+  <!-- ================= HEADER ================= -->
+  <header class="hero">
+    <div class="hero-top">
+      <div class="provider">
+        <div class="logo">[L]</div>
+        <div class="name">[Your Company Name]</div>
+        <div class="small">[Address] · [City], Algeria</div>
+        <div class="small">[Phone] · [Email] · [Website]</div>
+        <div class="small">RC: [ ] · NIF: [ ]</div>
+      </div>
+      <div class="quote-meta">
+        <span class="label">Quote · Devis</span>
+        <div class="big">N° DEV-2026-001</div>
+        <table>
+          <tr><td>Date</td><td><b>28/10/2026</b></td></tr>
+          <tr><td>Valid until</td><td><b>27/11/2026</b></td></tr>
+          <tr><td>Currency</td><td><b>EUR (≈ DZD)</b></td></tr>
+        </table>
+      </div>
+    </div>
+    <h1>Real Estate Website — Buy, Rent &amp; Reserve Online</h1>
+    <p class="subtitle">Four budget options, from a simple showcase site to a full platform with mobile apps, with the price of every feature.</p>
+  </header>
+
+  <div class="content">
+
+    <!-- ================= PARTIES ================= -->
+    <section class="parties">
+      <div class="party">
+        <h4>Client</h4>
+        <div class="pname">Albarakah Investment</div>
+        <p>Real Estate Agency (Agence immobilière)</p>
+        <p>[Client address]</p>
+        <p>Contact: [Name] · [Phone] · [Email]</p>
+      </div>
+      <div class="party">
+        <h4>Project</h4>
+        <div class="pname">Real estate agency website</div>
+        <p>Showcase, sale, rental and online reservation of houses and apartments.</p>
+        <p>Languages: French · Arabic · English (from Offer B)</p>
+      </div>
+    </section>
+
+    <p class="note">Prices are excluding taxes (HT). DZD amounts are indicative, at <b>1&nbsp;€ ≈ 150&nbsp;DZD</b>; the final amount will use the rate on the invoice date. Each offer includes <b>everything in the previous offer</b>.</p>
+
+    <!-- ================= 1. SUMMARY ================= -->
+    <h2><span class="num">1</span>Offers at a glance</h2>
+    <div class="cards">
+      <div class="card">
+        <div class="tier">Offer A</div>
+        <div class="cname">Starter — Showcase site</div>
+        <div class="price">1&nbsp;200&nbsp;€</div>
+        <div class="dzd">≈ 180&nbsp;000 DZD</div>
+        <div class="time">⏱ 2–3 weeks</div>
+        <ul>
+          <li>Up to 50 property listings</li>
+          <li>Basic search &amp; filters</li>
+          <li>Contact form + WhatsApp</li>
+          <li>Google Maps</li>
+          <li>Simple admin panel</li>
+        </ul>
+        <div class="target">Small agency starting online</div>
+      </div>
+      <div class="card featured">
+        <span class="badge">Recommended</span>
+        <div class="tier">Offer B</div>
+        <div class="cname">Standard — Booking</div>
+        <div class="price">3&nbsp;500&nbsp;€</div>
+        <div class="dzd">≈ 525&nbsp;000 DZD</div>
+        <div class="time">⏱ 5–6 weeks</div>
+        <ul>
+          <li>Custom design</li>
+          <li>FR / AR / EN</li>
+          <li>Client accounts &amp; favorites</li>
+          <li>Visit booking calendar</li>
+          <li>Reservation requests</li>
+          <li>Full admin dashboard</li>
+        </ul>
+        <div class="target">Agency wanting online visits &amp; reservation requests</div>
+      </div>
+      <div class="card">
+        <div class="tier">Offer C</div>
+        <div class="cname">Professional — Reservation &amp; Payment</div>
+        <div class="price">8&nbsp;000&nbsp;€</div>
+        <div class="dzd">≈ 1&nbsp;200&nbsp;000 DZD</div>
+        <div class="time">⏱ 9–11 weeks</div>
+        <ul>
+          <li>Online deposit (CIB / Edahabia / Stripe)</li>
+          <li>Real-time availability</li>
+          <li>Short-term rental calendar</li>
+          <li>PDF contracts &amp; receipts</li>
+          <li>CRM, roles, SMS, reports</li>
+        </ul>
+        <div class="target">Agency selling / renting at volume</div>
+      </div>
+      <div class="card">
+        <div class="tier">Offer D</div>
+        <div class="cname">Premium — Platform + Mobile apps</div>
+        <div class="price">18&nbsp;000&nbsp;€</div>
+        <div class="dzd">≈ 2&nbsp;700&nbsp;000 DZD</div>
+        <div class="time">⏱ 4–5 months</div>
+        <ul>
+          <li>iOS + Android apps</li>
+          <li>Owner / seller portal</li>
+          <li>New-build projects module</li>
+          <li>360° tours, live chat</li>
+          <li>E-signature, AI assistant</li>
+        </ul>
+        <div class="target">Investment group / property developer</div>
+      </div>
+    </div>
+
+    <!-- ================= 2. OFFER A ================= -->
+    <h2 class="page-break"><span class="num">2</span>Offer A — Starter (Showcase site)</h2>
+    <div class="offer-head">
+      <div class="desc">A clean, professional website. Visitors browse properties and contact the agency. No online booking.</div>
+      <div class="pill">1&nbsp;200&nbsp;€<small>≈ 180&nbsp;000 DZD</small></div>
+    </div>
+    <div class="table-wrap">
+    <table class="t">
+      <thead><tr><th>#</th><th>Feature</th><th>Details</th><th class="amt">Price</th></tr></thead>
+      <tbody>
+        <tr><td class="id">A1</td><td class="feat">UI/UX design (template-based)</td><td>Modern responsive theme adapted to the agency’s logo &amp; colors</td><td class="amt">200 €</td></tr>
+        <tr><td class="id">A2</td><td class="feat">Website pages</td><td>Home, About, Services, Properties, Property detail, Contact, Legal notice</td><td class="amt">200 €</td></tr>
+        <tr><td class="id">A3</td><td class="feat">Property listings</td><td>Up to 50 properties: photo gallery, price, surface, rooms, location, description</td><td class="amt">250 €</td></tr>
+        <tr><td class="id">A4</td><td class="feat">Basic search &amp; filters</td><td>Type (house / apartment / land), city, sale / rent, price range</td><td class="amt">150 €</td></tr>
+        <tr><td class="id">A5</td><td class="feat">Contact &amp; inquiry form</td><td>Form on each property, sent by email to the agency</td><td class="amt">80 €</td></tr>
+        <tr><td class="id">A6</td><td class="feat">WhatsApp &amp; call buttons</td><td>Click-to-chat / click-to-call on every listing</td><td class="amt">40 €</td></tr>
+        <tr><td class="id">A7</td><td class="feat">Google Maps</td><td>Agency location + approximate property location</td><td class="amt">60 €</td></tr>
+        <tr><td class="id">A8</td><td class="feat">Simple admin panel</td><td>Agency staff add / edit / delete properties</td><td class="amt">120 €</td></tr>
+        <tr><td class="id">A9</td><td class="feat">Basic SEO + analytics</td><td>Meta tags, sitemap, Google Search Console &amp; Analytics</td><td class="amt">60 €</td></tr>
+        <tr><td class="id">A10</td><td class="feat">Launch + training</td><td>Put online with SSL, 1-hour training session</td><td class="amt">40 €</td></tr>
+      </tbody>
+      <tfoot>
+        <tr class="total"><td colspan="3" class="lbl">Total Offer A (HT)</td><td class="amt">1&nbsp;200 €</td></tr>
+      </tfoot>
+    </table>
+    </div>
+    <p class="excl"><b>Not included:</b> client accounts, online reservation, online payment, multi-language.</p>
+
+    <!-- ================= 3. OFFER B ================= -->
+    <h2 class="page-break"><span class="num">3</span>Offer B — Standard (Booking)</h2>
+    <div class="offer-head">
+      <div class="desc">Everything in A, plus client accounts, visit scheduling, reservation requests and a full back-office.</div>
+      <div class="pill">3&nbsp;500&nbsp;€<small>≈ 525&nbsp;000 DZD</small></div>
+    </div>
+    <div class="table-wrap">
+    <table class="t">
+      <thead><tr><th>#</th><th>Feature</th><th>Details</th><th class="amt">Price</th></tr></thead>
+      <tbody>
+        <tr class="base"><td class="id">—</td><td class="feat">Offer A base</td><td>All Offer A features</td><td class="amt">1&nbsp;200 €</td></tr>
+        <tr><td class="id">B1</td><td class="feat">Custom UI/UX design</td><td>Figma mockups (desktop + mobile), 2 revision rounds</td><td class="amt">400 €</td></tr>
+        <tr><td class="id">B2</td><td class="feat">Multi-language</td><td>French / Arabic (right-to-left) / English</td><td class="amt">350 €</td></tr>
+        <tr><td class="id">B3</td><td class="feat">Client accounts</td><td>Sign up / login (email + Google), profile, password reset</td><td class="amt">300 €</td></tr>
+        <tr><td class="id">B4</td><td class="feat">Favorites &amp; saved searches</td><td>Save properties; email alert when a matching property is added</td><td class="amt">200 €</td></tr>
+        <tr><td class="id">B5</td><td class="feat">Advanced search</td><td>Rooms, surface, floor, features (parking, elevator, pool…), sorting, pagination</td><td class="amt">200 €</td></tr>
+        <tr><td class="id">B6</td><td class="feat">Interactive map search</td><td>Properties shown as pins on a map; search by area</td><td class="amt">200 €</td></tr>
+        <tr><td class="id">B7</td><td class="feat">Visit booking calendar</td><td>Client picks an available slot to visit; agency confirms</td><td class="amt">300 €</td></tr>
+        <tr><td class="id">B8</td><td class="feat">Reservation request</td><td>“Reserve this property” form with status: pending / accepted / refused</td><td class="amt">250 €</td></tr>
+        <tr><td class="id">B9</td><td class="feat">Admin dashboard</td><td>Manage properties, clients, visits, reservations; unlimited listings</td><td class="amt">450 €</td></tr>
+        <tr><td class="id">B10</td><td class="feat">Email notifications</td><td>Confirmation &amp; reminder emails to the client and the agency</td><td class="amt">150 €</td></tr>
+        <tr><td class="id">B11</td><td class="feat">Compare &amp; share</td><td>Compare up to 3 properties; share on social networks</td><td class="amt">100 €</td></tr>
+        <tr><td class="id">B12</td><td class="feat">Blog / news</td><td>Articles for SEO and market news</td><td class="amt">100 €</td></tr>
+        <tr><td class="id">B13</td><td class="feat">Testing &amp; launch</td><td>Cross-device testing, performance optimization</td><td class="amt muted">Included</td></tr>
+      </tbody>
+      <tfoot>
+        <tr><td colspan="3" class="lbl">Subtotal</td><td class="amt">4&nbsp;200 €</td></tr>
+        <tr class="disc"><td colspan="3" class="lbl">Package discount</td><td class="amt">−700 €</td></tr>
+        <tr class="total"><td colspan="3" class="lbl">Total Offer B (HT)</td><td class="amt">3&nbsp;500 €</td></tr>
+      </tfoot>
+    </table>
+    </div>
+
+    <!-- ================= 4. OFFER C ================= -->
+    <h2 class="page-break"><span class="num">4</span>Offer C — Professional (Online reservation &amp; payment)</h2>
+    <div class="offer-head">
+      <div class="desc">Everything in B, plus real online reservation with deposit payment, a rental availability calendar, staff roles and a CRM.</div>
+      <div class="pill">8&nbsp;000&nbsp;€<small>≈ 1&nbsp;200&nbsp;000 DZD</small></div>
+    </div>
+    <div class="table-wrap">
+    <table class="t">
+      <thead><tr><th>#</th><th>Feature</th><th>Details</th><th class="amt">Price</th></tr></thead>
+      <tbody>
+        <tr class="base"><td class="id">—</td><td class="feat">Offer B base</td><td>All Offer B features</td><td class="amt">3&nbsp;500 €</td></tr>
+        <tr><td class="id">C1</td><td class="feat">Online payment</td><td>Deposit / reservation fee online. Algeria: CIB / Edahabia (SATIM / Chargily); international: Stripe</td><td class="amt">900 €</td></tr>
+        <tr><td class="id">C2</td><td class="feat">Real-time availability</td><td>Property locked as “reserved” once the deposit is paid; auto-released if expired</td><td class="amt">400 €</td></tr>
+        <tr><td class="id">C3</td><td class="feat">Short-term rental booking</td><td>Nightly / monthly calendar, date-range selection, seasonal pricing</td><td class="amt">700 €</td></tr>
+        <tr><td class="id">C4</td><td class="feat">Reservation workflow</td><td>Request → deposit → documents → validation → contract → completed</td><td class="amt">500 €</td></tr>
+        <tr><td class="id">C5</td><td class="feat">Client document upload</td><td>ID, payslips, proof of address — secure storage</td><td class="amt">250 €</td></tr>
+        <tr><td class="id">C6</td><td class="feat">PDF generation</td><td>Automatic reservation receipt, invoice, pre-contract (promesse de vente / bail)</td><td class="amt">350 €</td></tr>
+        <tr><td class="id">C7</td><td class="feat">Roles &amp; permissions</td><td>Super-admin, manager, agent, accountant; each agent manages own listings &amp; leads</td><td class="amt">350 €</td></tr>
+        <tr><td class="id">C8</td><td class="feat">CRM / lead management</td><td>Track every prospect: source, status, notes, follow-up reminders</td><td class="amt">450 €</td></tr>
+        <tr><td class="id">C9</td><td class="feat">SMS notifications</td><td>Visit &amp; payment confirmations (SMS provider fees extra)</td><td class="amt">200 €</td></tr>
+        <tr><td class="id">C10</td><td class="feat">Loan / installment simulator</td><td>Monthly payment calculator (bank loan or developer installments)</td><td class="amt">150 €</td></tr>
+        <tr><td class="id">C11</td><td class="feat">Reviews &amp; ratings</td><td>Clients rate visits / agents; admin moderation</td><td class="amt">150 €</td></tr>
+        <tr><td class="id">C12</td><td class="feat">Statistics &amp; reports</td><td>Sales, reservations, revenue, most-viewed properties, agent performance; Excel export</td><td class="amt">400 €</td></tr>
+        <tr><td class="id">C13</td><td class="feat">Security &amp; data protection</td><td>Rate limiting, backups, audit logs; compliance with Law 18-07 on personal data</td><td class="amt">300 €</td></tr>
+        <tr><td class="id">C14</td><td class="feat">Advanced SEO</td><td>Real-estate structured data, fast loading, per-property SEO pages</td><td class="amt">200 €</td></tr>
+      </tbody>
+      <tfoot>
+        <tr><td colspan="3" class="lbl">Subtotal</td><td class="amt">8&nbsp;800 €</td></tr>
+        <tr class="disc"><td colspan="3" class="lbl">Package discount</td><td class="amt">−800 €</td></tr>
+        <tr class="total"><td colspan="3" class="lbl">Total Offer C (HT)</td><td class="amt">8&nbsp;000 €</td></tr>
+      </tfoot>
+    </table>
+    </div>
+
+    <!-- ================= 5. OFFER D ================= -->
+    <h2 class="page-break"><span class="num">5</span>Offer D — Premium (Full platform + mobile apps)</h2>
+    <div class="offer-head">
+      <div class="desc">Everything in C, plus mobile apps, an owner portal, immersive media and smart features.</div>
+      <div class="pill">18&nbsp;000&nbsp;€<small>≈ 2&nbsp;700&nbsp;000 DZD</small></div>
+    </div>
+    <div class="table-wrap">
+    <table class="t">
+      <thead><tr><th>#</th><th>Feature</th><th>Details</th><th class="amt">Price</th></tr></thead>
+      <tbody>
+        <tr class="base"><td class="id">—</td><td class="feat">Offer C base</td><td>All Offer C features</td><td class="amt">8&nbsp;000 €</td></tr>
+        <tr><td class="id">D1</td><td class="feat">Mobile apps iOS + Android</td><td>Search, favorites, booking, payment, push notifications; App Store &amp; Play Store publication</td><td class="amt">4&nbsp;500 €</td></tr>
+        <tr><td class="id">D2</td><td class="feat">Owner / seller portal</td><td>Private owners submit properties for sale / rent; agency validates; commission tracking</td><td class="amt">900 €</td></tr>
+        <tr><td class="id">D3</td><td class="feat">New-build projects module</td><td>Promotion immobilière: buildings, floors, interactive floor plan, unit-by-unit availability</td><td class="amt">1&nbsp;200 €</td></tr>
+        <tr><td class="id">D4</td><td class="feat">360° virtual tours &amp; video</td><td>Matterport / Kuula tour integration + video walkthroughs</td><td class="amt">400 €</td></tr>
+        <tr><td class="id">D5</td><td class="feat">Live chat / messaging</td><td>Real-time chat between client and agent, with history</td><td class="amt">600 €</td></tr>
+        <tr><td class="id">D6</td><td class="feat">E-signature</td><td>Online signature of reservation agreements</td><td class="amt">500 €</td></tr>
+        <tr><td class="id">D7</td><td class="feat">AI recommendations</td><td>“Properties you may like” based on searches and favorites</td><td class="amt">600 €</td></tr>
+        <tr><td class="id">D8</td><td class="feat">AI chatbot assistant</td><td>24/7 assistant answering FAQs and qualifying leads (AI usage fees extra)</td><td class="amt">700 €</td></tr>
+        <tr><td class="id">D9</td><td class="feat">Installment payment tracking</td><td>Payment schedule per buyer, reminders, payment history</td><td class="amt">500 €</td></tr>
+        <tr><td class="id">D10</td><td class="feat">Advanced analytics</td><td>Conversion funnel, heatmaps, marketing source tracking</td><td class="amt">300 €</td></tr>
+      </tbody>
+      <tfoot>
+        <tr><td colspan="3" class="lbl">Subtotal</td><td class="amt">18&nbsp;200 €</td></tr>
+        <tr class="disc"><td colspan="3" class="lbl">Package discount</td><td class="amt">−200 €</td></tr>
+        <tr class="total"><td colspan="3" class="lbl">Total Offer D (HT)</td><td class="amt">18&nbsp;000 €</td></tr>
+      </tfoot>
+    </table>
+    </div>
+
+    <!-- ================= 6. A LA CARTE ================= -->
+    <h2 class="page-break"><span class="num">6</span>À-la-carte options</h2>
+    <p class="lead">Any feature can be added on its own to a lower offer.</p>
+    <div class="table-wrap">
+    <table class="t">
+      <thead><tr><th>Option</th><th class="amt">Price</th><th>Option</th><th class="amt">Price</th></tr></thead>
+      <tbody>
+        <tr><td>Extra language</td><td class="amt">150 €</td><td>Live chat</td><td class="amt">600 €</td></tr>
+        <tr><td>Custom design (instead of template)</td><td class="amt">400 €</td><td>360° virtual tour integration</td><td class="amt">400 €</td></tr>
+        <tr><td>Client accounts</td><td class="amt">300 €</td><td>Owner / seller portal</td><td class="amt">900 €</td></tr>
+        <tr><td>Visit booking calendar</td><td class="amt">300 €</td><td>Mobile app (iOS + Android)</td><td class="amt">4&nbsp;500 €</td></tr>
+        <tr><td>Online payment (1 gateway)</td><td class="amt">600 €</td><td>Each additional payment gateway</td><td class="amt">+300 €</td></tr>
+        <tr><td>Short-term rental calendar</td><td class="amt">700 €</td><td>Import existing listings (Excel / old site)</td><td class="amt">150–400 €</td></tr>
+        <tr><td>PDF contracts / receipts</td><td class="amt">350 €</td><td>Logo / visual identity</td><td class="amt">250–600 €</td></tr>
+        <tr><td>CRM / leads</td><td class="amt">450 €</td><td>Professional photos / video</td><td class="amt">30–80 € / property</td></tr>
+        <tr><td>SMS notifications</td><td class="amt">200 €</td><td>Content writing &amp; translation</td><td class="amt">On quote</td></tr>
+        <tr><td>Loan simulator</td><td class="amt">150 €</td><td>Extra work outside scope</td><td class="amt">25 € / hour</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <!-- ================= 7. RECURRING ================= -->
+    <h2><span class="num">7</span>Annual running costs</h2>
+    <div class="table-wrap">
+    <table class="t">
+      <thead><tr><th>Item (per year)</th><th class="amt">A · Starter</th><th class="amt">B · Standard</th><th class="amt">C · Professional</th><th class="amt">D · Premium</th></tr></thead>
+      <tbody>
+        <tr><td>Domain name (.com / .dz)</td><td class="amt">15–25 €</td><td class="amt">15–25 €</td><td class="amt">15–25 €</td><td class="amt">15–25 €</td></tr>
+        <tr><td>Hosting</td><td class="amt">60 €</td><td class="amt">150 €</td><td class="amt">300 €</td><td class="amt">600–1&nbsp;200 €</td></tr>
+        <tr><td>Professional emails</td><td class="amt">0–50 €</td><td class="amt">50 €</td><td class="amt">100 €</td><td class="amt">200 €</td></tr>
+        <tr><td>SSL certificate</td><td class="amt">Free</td><td class="amt">Free</td><td class="amt">Free</td><td class="amt">Free</td></tr>
+        <tr><td>Maintenance &amp; updates</td><td class="amt">300 €</td><td class="amt">600 €</td><td class="amt">1&nbsp;200 €</td><td class="amt">2&nbsp;400 €</td></tr>
+        <tr><td>Apple + Google developer accounts</td><td class="amt">—</td><td class="amt">—</td><td class="amt">—</td><td class="amt">≈ 115 €</td></tr>
+      </tbody>
+      <tfoot>
+        <tr class="total"><td class="lbl">Total per year</td><td class="amt">≈ 400 €</td><td class="amt">≈ 850 €</td><td class="amt">≈ 1&nbsp;650 €</td><td class="amt">≈ 3&nbsp;500–4&nbsp;000 €</td></tr>
+      </tfoot>
+    </table>
+    </div>
+    <div class="two" style="margin-top:14px">
+      <div class="box">
+        <h3>Pay-per-use (billed directly to the client)</h3>
+        <ul>
+          <li>Payment fees: ≈ 1–3 % per transaction (SATIM / Chargily per contract; Stripe ≈ 1.5–2.9 %)</li>
+          <li>SMS: ≈ 0.02–0.05 € per message</li>
+          <li>Google Maps API: free tier, then pay-as-you-go</li>
+          <li>AI chatbot / recommendations: ≈ 20–100 € / month depending on traffic</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3>Maintenance includes</h3>
+        <ul>
+          <li>Security updates &amp; daily backups</li>
+          <li>Bug fixes and uptime monitoring</li>
+          <li>Small changes: 2 h / month (A), 4 h (B), 6 h (C), 8 h (D)</li>
+          <li>Priority support by phone / WhatsApp (C &amp; D)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ================= 8. TECH ================= -->
+    <h2 class="page-break"><span class="num">8</span>Proposed technology</h2>
+    <div class="table-wrap">
+    <table class="t">
+      <thead><tr><th>Layer</th><th>Offer A</th><th>Offers B, C, D</th></tr></thead>
+      <tbody>
+        <tr><td class="feat">Front-end</td><td>WordPress + real-estate theme</td><td>Next.js (React): fast and SEO-friendly</td></tr>
+        <tr><td class="feat">Back-end</td><td>WordPress</td><td>Node.js (NestJS) or Laravel</td></tr>
+        <tr><td class="feat">Database</td><td>MySQL</td><td>PostgreSQL</td></tr>
+        <tr><td class="feat">File storage</td><td>Hosting</td><td>S3-compatible storage (photos, documents)</td></tr>
+        <tr><td class="feat">Payments</td><td>—</td><td>SATIM / Chargily (CIB, Edahabia), Stripe (from Offer C)</td></tr>
+        <tr><td class="feat">Mobile</td><td>—</td><td>Flutter or React Native (Offer D)</td></tr>
+        <tr><td class="feat">Hosting</td><td>Shared hosting</td><td>VPS / cloud (OVH, Hetzner, AWS…)</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <!-- ================= 9. TIMELINE ================= -->
+    <h2><span class="num">9</span>Project timeline (Offer C example — 10 weeks)</h2>
+    <div class="table-wrap">
+    <table class="t">
+      <thead><tr><th>Week</th><th>Phase</th><th>Deliverable</th></tr></thead>
+      <tbody>
+        <tr><td class="id">1</td><td class="feat">Discovery &amp; specifications</td><td>Validated requirements document</td></tr>
+        <tr><td class="id">2–3</td><td class="feat">UI/UX design</td><td>Validated Figma mockups</td></tr>
+        <tr><td class="id">4–7</td><td class="feat">Development</td><td>Website, back-end, admin panel</td></tr>
+        <tr><td class="id">8</td><td class="feat">Payments &amp; integrations</td><td>Payment, SMS, maps and emails working</td></tr>
+        <tr><td class="id">9</td><td class="feat">Testing &amp; corrections</td><td>Test report, client acceptance</td></tr>
+        <tr><td class="id">10</td><td class="feat">Launch &amp; training</td><td>Site online, 2-hour training, user guide</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <!-- ================= 10. PAYMENT TERMS ================= -->
+    <h2><span class="num">10</span>Payment terms &amp; warranty</h2>
+    <div class="two">
+      <div class="box">
+        <h3>Payment schedule (Offers B, C, D)</h3>
+        <table class="t">
+          <tbody>
+            <tr><td>Quote signature (deposit)</td><td class="amt">30 %</td></tr>
+            <tr><td>Design mockups validated</td><td class="amt">30 %</td></tr>
+            <tr><td>Delivery on test server</td><td class="amt">30 %</td></tr>
+            <tr><td>Final launch</td><td class="amt">10 %</td></tr>
+          </tbody>
+        </table>
+        <p class="excl">Offer A: 50 % at signature, 50 % at delivery.</p>
+      </div>
+      <div class="box">
+        <h3>Warranty &amp; conditions</h3>
+        <ul>
+          <li><b>3 months</b> of free bug fixes after launch (<b>6 months</b> for Offer D)</li>
+          <li>Changes outside the agreed scope: <b>25 € / hour</b> or quoted separately</li>
+          <li>Source code and content belong to the client after full payment</li>
+          <li>Payment by bank transfer or cheque</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ================= 11/12. CLIENT INPUT & EXCLUSIONS ================= -->
+    <h2><span class="num">11</span>Client inputs &amp; exclusions</h2>
+    <div class="two">
+      <div class="box">
+        <h3>The client provides</h3>
+        <ul>
+          <li>Logo, brand colors and visual identity (or order as option)</li>
+          <li>Property data: high-quality photos, descriptions, prices, surfaces, addresses</li>
+          <li>Agency texts: about us, services, team</li>
+          <li>Legal info: RC, NIF, terms &amp; conditions, privacy policy, reservation / cancellation / refund policy</li>
+          <li>Payment merchant account (SATIM / Chargily agreement or Stripe)</li>
+          <li>Preferred domain name</li>
+          <li>One contact person to validate each step</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3>Not included</h3>
+        <ul>
+          <li>Content writing and translation (available as option)</li>
+          <li>Professional property photography / drone video (option)</li>
+          <li>Paid advertising (Facebook / Google Ads), social-media management</li>
+          <li>Third-party subscription fees (payment, SMS, maps, AI, app stores)</li>
+          <li>Legal drafting of contracts (to be validated by the agency’s lawyer or notary)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ================= 12. RECOMMENDATION ================= -->
+    <h2><span class="num">12</span>Our recommendation</h2>
+    <div class="reco">
+      <div class="r"><div class="tag">A</div><div><b>Limited budget / just starting:</b> start with Offer A and upgrade to B later. The code base is reused.</div></div>
+      <div class="r best"><div class="tag">B</div><div><b>Best value for most agencies:</b> Offer B covers visit booking and reservation requests, which is what clients need first. The deposit can still be paid at the agency.</div></div>
+      <div class="r"><div class="tag">C</div><div><b>Clients reserve and pay a deposit online:</b> Offer C.</div></div>
+      <div class="r"><div class="tag">D</div><div><b>New-build projects (promotion immobilière) and a mobile app:</b> Offer D.</div></div>
+    </div>
+    <p class="note" style="margin-top:14px">Suggested approach: <b>launch Offer B in about 6 weeks</b>, then add Offer C modules (online payment, CRM, PDF contracts) in phase 2 based on the first client feedback.</p>
+
+    <!-- ================= SIGNATURES ================= -->
+    <h2><span class="num">13</span>Acceptance</h2>
+    <p class="lead">Selected offer: ☐ A &nbsp; ☐ B &nbsp; ☐ C &nbsp; ☐ D &nbsp; — &nbsp; Options: ______________________________</p>
+    <div class="signs">
+      <div class="sign">
+        <h4>For the provider</h4>
+        <p>[Your Company Name]</p>
+        <div class="line">Name:</div>
+        <div class="line">Date:</div>
+        <div class="line">Signature &amp; stamp:</div>
+      </div>
+      <div class="sign">
+        <h4>For the client — “Bon pour accord”</h4>
+        <p>Albarakah Investment</p>
+        <div class="line">Name:</div>
+        <div class="line">Date:</div>
+        <div class="line">Signature &amp; stamp:</div>
+      </div>
+    </div>
+
+    <div class="doc-footer">
+      [Your Company Name] · [Address] · [Phone] · [Email] — Quote N° DEV-2026-001 — Prices excluding taxes (HT); VAT/TVA added where applicable.
+    </div>
+  </div>
+</main>
+
+<script>
+  (function () {
+    var btn = document.getElementById('editBtn');
+    var doc = document.querySelector('.doc');
+    btn.addEventListener('click', function () {
+      var on = btn.getAttribute('aria-pressed') !== 'true';
+      btn.setAttribute('aria-pressed', String(on));
+      doc.contentEditable = on ? 'true' : 'false';
+      document.body.classList.toggle('editing', on);
+      btn.textContent = on ? '✓ Done editing' : '✎ Edit text';
+    });
+  })();
+</script>
+</body>
+</html>

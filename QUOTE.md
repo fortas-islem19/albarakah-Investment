@@ -2,6 +2,7 @@
 
 **Project:** Real-estate agency website for showcasing, selling, and reserving houses and apartments
 **Document type:** Commercial quote (devis) with 4 budget options + à-la-carte feature pricing
+**Printable version:** [`Albarakah_Investment_Quote.html`](Albarakah_Investment_Quote.html) — open in a browser, edit, then Print → Save as PDF
 **Validity:** 30 days from issue date
 **Currency:** EUR (€), with approximate DZD equivalent (1 € ≈ 150 DZD — adjust to the day's rate)
 
@@ -16,7 +17,7 @@
 | **A. Starter — Vitrine** | Small agency starting online | **1 200 €** | ≈ 180 000 DZD | 2–3 weeks |
 | **B. Standard — Booking** | Agency that wants online visit & reservation requests | **3 500 €** | ≈ 525 000 DZD | 5–6 weeks |
 | **C. Professional — Online Reservation & Payment** | Agency selling/renting at volume, online deposits | **8 000 €** | ≈ 1 200 000 DZD | 9–11 weeks |
-| **D. Premium — Full Platform + Mobile Apps** | Investment group / promoter with many projects | **18 000 €+** | ≈ 2 700 000 DZD+ | 4–5 months |
+| **D. Premium — Full Platform + Mobile Apps** | Investment group / promoter with many projects | **18 000 €** | ≈ 2 700 000 DZD | 4–5 months |
 
 Each offer **includes everything in the previous offer**.
 
@@ -63,8 +64,10 @@ Everything in A, plus: client accounts, visit scheduling, reservation requests, 
 | B10 | Email notifications | Confirmation & reminder emails to client and agency | 150 € |
 | B11 | Property comparison + share | Compare up to 3 properties, share on social networks | 100 € |
 | B12 | Blog / news | Articles for SEO and market news | 100 € |
-| B13 | Testing & launch | Cross-device tests, performance optimization | 100 € (included) |
-| | **Total** | | **≈ 3 500 €** |
+| B13 | Testing & launch | Cross-device tests, performance optimization | Included |
+| | Subtotal | | 4 200 € |
+| | Package discount | | −700 € |
+| | **Total** | | **3 500 €** |
 
 ---
 
@@ -89,11 +92,13 @@ Everything in B, plus: real online reservation with deposit payment, rental avai
 | C12 | Statistics & reports | Sales, reservations, revenue, most-viewed properties, agent performance; Excel export | 400 € |
 | C13 | Security hardening | Rate limiting, backups, audit logs, personal-data compliance (Law 18-07 / GDPR) | 300 € |
 | C14 | Advanced SEO | Schema.org real-estate markup, fast loading, per-property SEO pages | 200 € |
-| | **Total** | | **≈ 8 000 €** |
+| | Subtotal | | 8 800 € |
+| | Package discount | | −800 € |
+| | **Total** | | **8 000 €** |
 
 ---
 
-## 5. Offer D — Premium (Full Platform + Mobile Apps) — from 18 000 €
+## 5. Offer D — Premium (Full Platform + Mobile Apps) — 18 000 €
 
 Everything in C, plus mobile apps, owner portal, immersive media, and smart features.
 
@@ -110,7 +115,9 @@ Everything in C, plus mobile apps, owner portal, immersive media, and smart feat
 | D8 | AI chatbot assistant | 24/7 assistant answering FAQs and qualifying leads (AI usage fees extra) | 700 € |
 | D9 | Installment payment tracking | Payment schedule per buyer, reminders, payment history | 500 € |
 | D10 | Advanced analytics dashboard | Conversion funnel, heatmaps, marketing source tracking | 300 € |
-| | **Total** | | **≈ 18 200 €** |
+| | Subtotal | | 18 200 € |
+| | Package discount | | −200 € |
+| | **Total** | | **18 000 €** |
 
 ---
 
