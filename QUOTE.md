@@ -3,6 +3,7 @@
 | File | For | Purpose |
 |---|---|---|
 | [`MOSTALIFE_Website_Quote.html`](MOSTALIFE_Website_Quote.html) | **Client** | Full quote in **French, Arabic and English** (switch in the toolbar), prices in **USD and DZD**. Toolbar: language, exchange rate (all DA amounts update), “Edit text”, “Print / PDF”. |
+| [`MOSTALIFE_Quote_FR.html`](MOSTALIFE_Quote_FR.html) · [`_AR.html`](MOSTALIFE_Quote_AR.html) · [`_EN.html`](MOSTALIFE_Quote_EN.html) | **Client** | One HTML file per language (same toolbar: exchange rate, “Edit text”, “Print / PDF”). |
 | `MOSTALIFE_Quote_FR.pdf` · `_AR.pdf` · `_EN.pdf` | **Client** | Ready-made PDF of each language (11 A4 pages, rate 1 USD = 135 DZD). |
 | [`SALES_PLAYBOOK.md`](SALES_PLAYBOOK.md) | **You only** | How to pitch, which plan to push, discovery questions, objection handling, follow-up messages, contract checklist. |
 | [`tools/build_quote.py`](tools/build_quote.py) | Developer | Regenerates the HTML from one data file (prices, texts in 3 languages, default rate). |
@@ -25,4 +26,5 @@ Maintenance: $20 / $45 / $90 per month (≈ 2,700 / 6,100 / 12,200 DA).
 
 ```bash
 python3 tools/build_quote.py tools/tower.jpg MOSTALIFE_Website_Quote.html
+for l in FR AR EN; do python3 tools/build_quote.py tools/tower.jpg MOSTALIFE_Quote_$l.html $(echo $l | tr A-Z a-z); done
 ```

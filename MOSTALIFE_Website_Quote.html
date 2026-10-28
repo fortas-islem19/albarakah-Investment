@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -232,12 +232,8 @@
 <body data-lang="fr">
 
 <div class="toolbar" role="toolbar" aria-label="Document actions">
-  <div class="langs" role="group" aria-label="Language">
-    <button type="button" data-setlang="fr" aria-pressed="true">FR</button>
-    <button type="button" data-setlang="ar" aria-pressed="false">العربية</button>
-    <button type="button" data-setlang="en" aria-pressed="false">EN</button>
-  </div>
-  <label><span id="rateLbl">Taux : 1 $ =</span> <input id="rate" type="number" min="1" step="0.01" value="135" inputmode="decimal"> DA</label>
+<div class="langs" role="group" aria-label="Language"><button type="button" data-setlang="fr" aria-pressed="true">FR</button><button type="button" data-setlang="ar" aria-pressed="false">العربية</button><button type="button" data-setlang="en" aria-pressed="false">EN</button></div>
+  <label><span id="rateLbl">Taux : 1 $ =</span> <input id="rate" type="number" min="1" step="0.01" value="135" inputmode="decimal"> <span id="curLbl">DA</span></label>
   <button type="button" id="editBtn" aria-pressed="false">✎ Modifier le texte</button>
   <button type="button" class="primary" id="printBtn">⎙ Imprimer / PDF</button>
   <span class="hint" id="hint"></span>
@@ -951,9 +947,9 @@
 <script>
 (function () {
   var UI = {
-    fr: { edit: '✎ Modifier le texte', done: '✓ Terminer', print: '⎙ Imprimer / PDF', rate: 'Taux : 1 $ =', hint: 'Choisissez la langue, cliquez sur « Modifier le texte » pour remplir les [crochets], ajustez le taux de change, puis imprimez.' },
-    ar: { edit: '✎ تعديل النص', done: '✓ إنهاء', print: '⎙ طباعة / PDF', rate: 'سعر الصرف: 1 $ =', hint: 'اختر اللغة، ثم انقر على «تعديل النص» لملء الحقول بين [معقوفين]، واضبط سعر الصرف، ثم اطبع.' },
-    en: { edit: '✎ Edit text', done: '✓ Done editing', print: '⎙ Print / Save as PDF', rate: 'Rate: 1 $ =', hint: 'Pick a language, click “Edit text” to fill in the [brackets], set the exchange rate, then print.' }
+    fr: { edit: '✎ Modifier le texte', done: '✓ Terminer', print: '⎙ Imprimer / PDF', rate: 'Taux : 1 $ =', hint: 'Cliquez sur « Modifier le texte » pour remplir les [crochets], ajustez le taux de change, puis imprimez.' },
+    ar: { edit: '✎ تعديل النص', done: '✓ إنهاء', print: '⎙ طباعة / PDF', rate: 'سعر الصرف: 1 $ =', hint: 'انقر على «تعديل النص» لملء الحقول بين [معقوفين]، واضبط سعر الصرف، ثم اطبع.' },
+    en: { edit: '✎ Edit text', done: '✓ Done editing', print: '⎙ Print / Save as PDF', rate: 'Rate: 1 $ =', hint: 'Click “Edit text” to fill in the [brackets], set the exchange rate, then print.' }
   };
   var CUR = { en: 'DZD', fr: 'DA', ar: 'دج' };
   var body = document.body, editBtn = document.getElementById('editBtn'), rateIn = document.getElementById('rate');
@@ -978,7 +974,7 @@
     document.querySelectorAll('.rate-val').forEach(function (el) { el.textContent = String(rate); });
   }
   function setLang(lang) {
-    if (!UI[lang]) lang = 'fr';
+    if (!document.querySelector('.doc[data-lang="' + lang + '"]')) lang = document.querySelector('.doc').dataset.lang;
     body.dataset.lang = lang;
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-setlang]').forEach(function (b) {
@@ -987,6 +983,7 @@
     editBtn.textContent = editing ? UI[lang].done : UI[lang].edit;
     document.getElementById('printBtn').textContent = UI[lang].print;
     document.getElementById('rateLbl').textContent = UI[lang].rate;
+    document.getElementById('curLbl').textContent = CUR[lang];
     document.getElementById('hint').textContent = UI[lang].hint;
     document.title = document.querySelector('.doc[data-lang="' + lang + '"]').dataset.title;
     if (location.hash !== '#' + lang) history.replaceState(null, '', '#' + lang);
@@ -1004,7 +1001,7 @@
   editBtn.addEventListener('click', function () { setEditing(!editing); });
   document.getElementById('printBtn').addEventListener('click', function () { window.print(); });
   rateIn.addEventListener('input', applyRate);
-  setLang((location.hash || '#fr').slice(1));
+  setLang((location.hash || '#').slice(1));
 })();
 </script>
 </body>

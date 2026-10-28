@@ -1,5 +1,6 @@
 """Builds the trilingual (FR / AR / EN) MOSTALIFE quote with USD + DZD prices.
-Usage: python3 tools/build_quote.py tools/tower.jpg MOSTALIFE_Website_Quote.html
+Usage: python3 tools/build_quote.py tools/tower.jpg MOSTALIFE_Website_Quote.html [fr|ar|en]
+(the optional last argument builds a single-language file)
 """
 import base64
 import html
@@ -11,7 +12,7 @@ tower_path, out_path = sys.argv[1], sys.argv[2]
 TOWER = base64.b64encode(open(tower_path, "rb").read()).decode()
 
 RATE = 135  # default DZD per 1 USD; editable in the page toolbar
-LANGS = ["fr", "ar", "en"]
+LANGS = sys.argv[3].split(",") if len(sys.argv) > 3 else ["fr", "ar", "en"]
 DIR = {"fr": "ltr", "ar": "rtl", "en": "ltr"}
 CUR = {"en": "DZD", "fr": "DA", "ar": "دج"}
 
@@ -1070,9 +1071,9 @@ CSS = r"""
 JS = r"""
 (function () {
   var UI = {
-    fr: { edit: '✎ Modifier le texte', done: '✓ Terminer', print: '⎙ Imprimer / PDF', rate: 'Taux : 1 $ =', hint: 'Choisissez la langue, cliquez sur « Modifier le texte » pour remplir les [crochets], ajustez le taux de change, puis imprimez.' },
-    ar: { edit: '✎ تعديل النص', done: '✓ إنهاء', print: '⎙ طباعة / PDF', rate: 'سعر الصرف: 1 $ =', hint: 'اختر اللغة، ثم انقر على «تعديل النص» لملء الحقول بين [معقوفين]، واضبط سعر الصرف، ثم اطبع.' },
-    en: { edit: '✎ Edit text', done: '✓ Done editing', print: '⎙ Print / Save as PDF', rate: 'Rate: 1 $ =', hint: 'Pick a language, click “Edit text” to fill in the [brackets], set the exchange rate, then print.' }
+    fr: { edit: '✎ Modifier le texte', done: '✓ Terminer', print: '⎙ Imprimer / PDF', rate: 'Taux : 1 $ =', hint: 'Cliquez sur « Modifier le texte » pour remplir les [crochets], ajustez le taux de change, puis imprimez.' },
+    ar: { edit: '✎ تعديل النص', done: '✓ إنهاء', print: '⎙ طباعة / PDF', rate: 'سعر الصرف: 1 $ =', hint: 'انقر على «تعديل النص» لملء الحقول بين [معقوفين]، واضبط سعر الصرف، ثم اطبع.' },
+    en: { edit: '✎ Edit text', done: '✓ Done editing', print: '⎙ Print / Save as PDF', rate: 'Rate: 1 $ =', hint: 'Click “Edit text” to fill in the [brackets], set the exchange rate, then print.' }
   };
   var CUR = { en: 'DZD', fr: 'DA', ar: 'دج' };
   var body = document.body, editBtn = document.getElementById('editBtn'), rateIn = document.getElementById('rate');
@@ -1097,7 +1098,7 @@ JS = r"""
     document.querySelectorAll('.rate-val').forEach(function (el) { el.textContent = String(rate); });
   }
   function setLang(lang) {
-    if (!UI[lang]) lang = 'fr';
+    if (!document.querySelector('.doc[data-lang="' + lang + '"]')) lang = document.querySelector('.doc').dataset.lang;
     body.dataset.lang = lang;
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-setlang]').forEach(function (b) {
@@ -1106,6 +1107,7 @@ JS = r"""
     editBtn.textContent = editing ? UI[lang].done : UI[lang].edit;
     document.getElementById('printBtn').textContent = UI[lang].print;
     document.getElementById('rateLbl').textContent = UI[lang].rate;
+    document.getElementById('curLbl').textContent = CUR[lang];
     document.getElementById('hint').textContent = UI[lang].hint;
     document.title = document.querySelector('.doc[data-lang="' + lang + '"]').dataset.title;
     if (location.hash !== '#' + lang) history.replaceState(null, '', '#' + lang);
@@ -1123,32 +1125,33 @@ JS = r"""
   editBtn.addEventListener('click', function () { setEditing(!editing); });
   document.getElementById('printBtn').addEventListener('click', function () { window.print(); });
   rateIn.addEventListener('input', applyRate);
-  setLang((location.hash || '#fr').slice(1));
+  setLang((location.hash || '#').slice(1));
 })();
 """
 
+LANG_LABEL = {"fr": "FR", "ar": "العربية", "en": "EN"}
+lang_buttons = "" if len(LANGS) == 1 else (
+    '<div class="langs" role="group" aria-label="Language">'
+    + "".join(f'<button type="button" data-setlang="{l}" aria-pressed="{str(i == 0).lower()}">{LANG_LABEL[l]}</button>' for i, l in enumerate(LANGS))
+    + "</div>")
 docs = "".join(render_doc(l).replace('<main class="doc"', f'<main class="doc" data-title="{html.escape(S["title"][l])}"', 1) for l in LANGS)
 
 page = f"""<!DOCTYPE html>
-<html lang="fr">
+<html lang="{LANGS[0]}" dir="{DIR[LANGS[0]]}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{html.escape(S["title"]["fr"])}</title>
+<title>{html.escape(S["title"][LANGS[0]])}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>{CSS}</style>
 </head>
-<body data-lang="fr">
+<body data-lang="{LANGS[0]}">
 
 <div class="toolbar" role="toolbar" aria-label="Document actions">
-  <div class="langs" role="group" aria-label="Language">
-    <button type="button" data-setlang="fr" aria-pressed="true">FR</button>
-    <button type="button" data-setlang="ar" aria-pressed="false">العربية</button>
-    <button type="button" data-setlang="en" aria-pressed="false">EN</button>
-  </div>
-  <label><span id="rateLbl">Taux : 1 $ =</span> <input id="rate" type="number" min="1" step="0.01" value="{RATE}" inputmode="decimal"> DA</label>
+{lang_buttons}
+  <label><span id="rateLbl">Taux : 1 $ =</span> <input id="rate" type="number" min="1" step="0.01" value="{RATE}" inputmode="decimal"> <span id="curLbl">DA</span></label>
   <button type="button" id="editBtn" aria-pressed="false">✎ Modifier le texte</button>
   <button type="button" class="primary" id="printBtn">⎙ Imprimer / PDF</button>
   <span class="hint" id="hint"></span>
